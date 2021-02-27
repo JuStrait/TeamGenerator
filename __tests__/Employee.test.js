@@ -11,10 +11,10 @@ describe('Employee class', () => {
         expect(employee).toBeTruthy();
     });
     test("verify role", () => {
-        expect(employee.getRole()).toEqual('Employee');
+        expect(employee.getRole()).toEqual('id');
     });
     test("verify id", () => {
-        expect(employee.getId()).toEqual('id');
+        expect(employee.getId()).toEqual('test');
     });
     test("verify email", () => {
         expect(employee.getEmail()).toEqual('test@mail.com');
