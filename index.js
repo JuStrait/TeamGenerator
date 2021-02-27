@@ -8,7 +8,7 @@ const Engineer = require('./lib/Engineer.js');
 const Inquirer = require('inquirer');
 const Jest = require('jest');
 const fs = require('fs');
-const axios = require('axios');
+
 
 // Starting prompt
 const initiateScript = [{
@@ -218,26 +218,6 @@ async function addEngineer() {
                 'gitname': data.gitname
             };
             employees[0].gitname = answer.gitname;
-        })
-        .then(async function () {
-            const gitname = employees[0].gitname;
-
-            // Note this is looking for the usersname, not the full GitHub URL
-            let queryURL = 'https://api.gitname.com/users/' + gitname;
-            axios
-                .get(queryURL)
-                .then(async function (response) {
-                    const repository = {
-                        "gitname": response.data.login,
-                    };
-
-                    employees[0].gitname = repository.gitname;
-                });
-        });
-    
-    // We need a timeout here as we are making an AJAX request using Axios
-    // This will tick for 2 milliseconds
-    setTimeout(function () {
         const name = employees[0].name;
         const id = employees[0].id;
         const email = employees[0].email;
@@ -246,7 +226,7 @@ async function addEngineer() {
         const engineer = new Engineer(name, id, email, gitname);
 
         engineers.push(engineer);
-    }, 2000);
+    });
 
     next();
 };
@@ -303,7 +283,7 @@ function generatePage() {
     for (i = 0; i < managers.length; i++) {
         let card = managerCard.replace('{{name}}', managers[i].name);
         card = card.replace('{{id}}', managers[i].id);
-        card = card.replace('{{email}}', managers[i].email);
+        card = card.replace(/{{email}}/g, managers[i].email);
         card = card.replace('{{phone}}', managers[i].phone);
 
         managerCards.push(card);
@@ -315,8 +295,8 @@ function generatePage() {
     for (i = 0; i < engineers.length; i++) {
         let card = engineerCard.replace('{{name}}', engineers[i].name);
         card = card.replace('{{id}}', engineers[i].id);
-        card = card.replace('{{email}}', engineers[i].email);
-        card = card.replace('{{gitname}}', engineers[i].gitname);
+        card = card.replace(/{{email}}/g, engineers[i].email);
+        card = card.replace(/{{gitname}}/g, engineers[i].gitname);
 
         engineerCards.push(card);
     }
@@ -327,7 +307,7 @@ function generatePage() {
     for (i = 0; i < interns.length; i++) {
         let card = internCard.replace('{{name}}', interns[i].name);
         card = card.replace('{{id}}', interns[i].id);
-        card = card.replace('{{email}}', interns[i].email);
+        card = card.replace(/{{email}}/g, interns[i].email);
         card = card.replace('{{school}}', interns[i].school);
 
         internCards.push(card);
@@ -338,7 +318,7 @@ function generatePage() {
     teamPage = template.replace('{{teammembers}}', payload);
 
     // Write the final result
-    fs.writeFile('./output/teampage.html', teamPage);
+    fs.writeFileSync('./output/teampage.html', teamPage);
 
     console.log('Teampage Generated.');
 }
