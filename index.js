@@ -71,7 +71,8 @@ const questions = [
         name: "title",
         choices: [
             'engineer',
-            'intern'
+            'intern',
+            'manager'
         ]
     }
 ];
