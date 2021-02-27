@@ -13,7 +13,7 @@ describe('Intern class', () => {
     test("verify role", () => {
         expect(intern.getRole()).toEqual('Intern');
     });
-    test("verify git", () => {
+    test("verify school", () => {
         expect(intern.getSchool()).toEqual('school');
     });
 });
